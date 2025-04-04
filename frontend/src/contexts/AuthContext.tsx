@@ -34,7 +34,6 @@ export interface Book {
   language?: string;
   pages?: number;
   link?: string;
-  owner?: string;
 }
 
 export interface UserWithCollection extends User {
@@ -100,6 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
 
     if (token) {
+      console.log("TOKEN", token);
       Promise.all([getUserProfile(token), getUserProfileBooks(token)])
         .then(([user, userBooks]) => {
           console.log("🟩 Fetched user books:", userBooks); // <-- ADD THIS
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else {
       getDefaultBooks()
         .then((defaultBooks) => {
-          console.log("🟦 No token - loading default books:", defaultBooks); // <-- ADD THIS
+          console.log("No token - loading default books:", defaultBooks); // <-- ADD THIS
           setBookCollection(defaultBooks);
         })
         .catch((err) => {
@@ -242,7 +242,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const addedBook = await addToCollectionAPI(book, token); // your API util
-  
+
       setBookCollection((prev) => [...prev, addedBook]);
     } catch (error) {
       console.error("Failed to add book to collection:", error);

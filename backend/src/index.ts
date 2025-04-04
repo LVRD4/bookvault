@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -11,6 +11,7 @@ import Book from "./models/book.model";
 dotenv.config();
 
 const app = express();
+const router = Router();
 
 async function setOwnerFieldForDefaultBooks() {
   try {
@@ -47,8 +48,12 @@ console.log("process.env", process.env.MONGODB_URI);
 // Database connection
 mongoose
   .connect(process.env.MONGODB_URI!)
-  .then(() => {
+  .then(async () => {
     console.log("Connected to MongoDB");
+
+    // ✅ Run once
+    //await setOwnerFieldForDefaultBooks(); // remove after running once
+
     const port = process.env.PORT;
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);

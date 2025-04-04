@@ -18,7 +18,7 @@ export function getDefaultBooks(): Promise<BookResponse[]> {
 }
 
 export function getUserProfileBooks(token: string): Promise<BookResponse[]> {
-  return request(`${BOOK_BASE_URL}/`, {
+  return request(`${BOOK_BASE_URL}/user-books`, {
     headers: {
       Accept: "application/json",
       authorization: `Bearer ${token}`,

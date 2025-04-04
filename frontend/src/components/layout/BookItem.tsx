@@ -42,7 +42,7 @@ function BookItem({ book, setBookFormMode }: BookItemProps) {
     ? book.imageLink
     : `https://raw.githubusercontent.com/benoitvallon/100-best-books/master/static/${book.imageLink}`;
 
-    console.log("MY IMAGE URL", imageUrl)
+  //console.log("MY IMAGE URL", imageUrl)
 
   let isLoggedIn = true;
   let isBookSaved = false;
