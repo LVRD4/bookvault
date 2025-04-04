@@ -99,6 +99,8 @@ export const updateBook = async (
   if (!req.user) {
     throw new UnauthorizedError(UNAUTHENTICATED_ERROR_MSG);
   }
+  const updateData = { ...req.body };
+  delete updateData.owner;
   const owner = new Types.ObjectId(req.user.userId);
 
   console.log("Looking for book with id:", req.params.id, "and owner:", owner);
@@ -108,7 +110,7 @@ export const updateBook = async (
         _id: req.params.id,
         owner,
       },
-      req.body,
+      updateData,
       { new: true }
     );
     if (!book) {

@@ -242,6 +242,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const addedBook = await addToCollectionAPI(book, token); // your API util
+  
       setBookCollection((prev) => [...prev, addedBook]);
     } catch (error) {
       console.error("Failed to add book to collection:", error);
