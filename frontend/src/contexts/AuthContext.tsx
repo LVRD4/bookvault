@@ -34,6 +34,7 @@ export interface Book {
   language?: string;
   pages?: number;
   link?: string;
+  owner?: string;
 }
 
 export interface UserWithCollection extends User {
@@ -95,14 +96,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const token = getToken();
-
+    console.log(token);
     setIsLoading(true);
 
     if (token) {
       Promise.all([getUserProfile(token), getUserProfileBooks(token)])
         .then(([user, userBooks]) => {
+          console.log("🟩 Fetched user books:", userBooks); // <-- ADD THIS
           setCurrentUser(user);
-          setBookCollection(userBooks); // Already includes duplicated defaults
+          setBookCollection(userBooks);
           setIsLoggedIn(true);
         })
         .catch((err) => {
@@ -110,14 +112,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           removeToken();
           setCurrentUser(null);
 
-          // fallback to public default books if token invalid
-          getDefaultBooks().then(setBookCollection);
+          getDefaultBooks().then((defaultBooks) => {
+            console.log("🟨 Fallback to default books:", defaultBooks); // <-- ADD THIS
+            setBookCollection(defaultBooks);
+          });
         })
         .finally(() => setIsLoading(false));
     } else {
-      // Not logged in — show public defaults
       getDefaultBooks()
-        .then(setBookCollection)
+        .then((defaultBooks) => {
+          console.log("🟦 No token - loading default books:", defaultBooks); // <-- ADD THIS
+          setBookCollection(defaultBooks);
+        })
         .catch((err) => {
           console.error("Failed to load default books", err);
         })
